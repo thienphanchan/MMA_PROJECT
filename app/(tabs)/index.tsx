@@ -1,36 +1,29 @@
 import ProductCard from '@/components/ProductCard';
 import SearchBar from '@/components/SearchBar';
+import { colors, fontSize, spacing } from '@/constants/theme';
 import useProducts from '@/hooks/useProducts';
 import useSearch from '@/hooks/useSearch';
 import useCartStore from '@/store/cartStore';
+import type { Product } from '@/types/product';
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
-    ActivityIndicator,
-    FlatList,
-    StyleSheet,
-    Text,
-    View,
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
-
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-}
 
 export default function HomeScreen(): React.JSX.Element {
   const router = useRouter();
-  const { products, loading, error } = useProducts();
+  const { products, loading, error, fetchProducts } = useProducts();
   const { query, setQuery, filteredResults } = useSearch(products);
-  const addToCart = useCartStore((state: { addToCart: (product: Product) => void }) => state.addToCart);
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  useEffect(() => {
+    void fetchProducts();
+  }, [fetchProducts]);
 
   const displayedProducts: Product[] = query.trim() ? filteredResults : products;
 
@@ -45,7 +38,7 @@ export default function HomeScreen(): React.JSX.Element {
   if (loading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#6200EE" />
+        <ActivityIndicator size="large" color={colors.primary} />
         <Text style={styles.loadingText}>Loading products...</Text>
       </View>
     );
@@ -89,39 +82,39 @@ export default function HomeScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.background,
   },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
+    padding: spacing.lg,
   },
   loadingText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: '#555',
+    marginTop: spacing.sm,
+    fontSize: fontSize.md,
+    color: colors.textSecondary,
   },
   errorText: {
-    fontSize: 18,
+    fontSize: fontSize.lg,
     fontWeight: '600',
-    color: '#D32F2F',
-    marginBottom: 8,
+    color: colors.danger,
+    marginBottom: spacing.xs,
   },
   errorDetail: {
-    fontSize: 14,
-    color: '#777',
+    fontSize: fontSize.sm,
+    color: colors.textSecondary,
     textAlign: 'center',
   },
   emptyText: {
-    fontSize: 16,
-    color: '#888',
+    fontSize: fontSize.md,
+    color: colors.textMuted,
   },
   row: {
     justifyContent: 'space-between',
-    paddingHorizontal: 12,
+    paddingHorizontal: spacing.sm,
   },
   list: {
-    paddingVertical: 12,
+    paddingVertical: spacing.sm,
   },
 });

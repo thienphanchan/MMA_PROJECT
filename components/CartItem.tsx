@@ -2,7 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import theme from '../constants/theme';
+import { colors, fontSize, fontWeight, radius, shadow, spacing } from '../constants/theme';
 import { CartItem as CartItemType } from '../types/cart';
 import { formatCurrency } from '../utils/currency';
 
@@ -41,7 +41,7 @@ const CartItem: React.FC<CartItemProps> = ({
             onPress={() => onRemove(product.id)}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <Feather name="trash-2" size={16} color={theme.colors.danger} />
+            <Feather name="trash-2" size={16} color={colors.danger} />
           </TouchableOpacity>
         </View>
 
@@ -53,7 +53,7 @@ const CartItem: React.FC<CartItemProps> = ({
             onPress={() => onDecrease(product.id)}
             activeOpacity={0.7}
           >
-            <Feather name="minus" size={14} color={theme.colors.text} />
+            <Feather name="minus" size={14} color={colors.text} />
           </TouchableOpacity>
 
           <Text style={styles.quantity}>{quantity}</Text>
@@ -63,7 +63,7 @@ const CartItem: React.FC<CartItemProps> = ({
             onPress={() => onIncrease(product.id)}
             activeOpacity={0.7}
           >
-            <Feather name="plus" size={14} color={theme.colors.text} />
+            <Feather name="plus" size={14} color={colors.text} />
           </TouchableOpacity>
         </View>
       </View>
@@ -74,24 +74,24 @@ const CartItem: React.FC<CartItemProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: theme.colors.background,
-    borderRadius: theme.radius.md,
+    backgroundColor: colors.background,
+    borderRadius: radius.md,
     borderWidth: 1,
-    borderColor: theme.colors.border,
-    marginHorizontal: theme.spacing.md,
-    marginBottom: theme.spacing.md,
-    padding: theme.spacing.md,
-    ...theme.shadow.sm,
+    borderColor: colors.border,
+    marginHorizontal: spacing.md,
+    marginBottom: spacing.md,
+    padding: spacing.md,
+    ...shadow.sm,
   },
   imageContainer: {
     width: 80,
     height: 80,
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.radius.sm,
+    backgroundColor: colors.surface,
+    borderRadius: radius.sm,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: theme.spacing.xs,
-    marginRight: theme.spacing.md,
+    padding: spacing.xs,
+    marginRight: spacing.md,
   },
   image: {
     width: '100%',
@@ -100,45 +100,45 @@ const styles = StyleSheet.create({
   details: {
     flex: 1,
     justifyContent: 'space-between',
-    gap: theme.spacing.xs,
+    gap: spacing.xs,
   },
   titleRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    gap: theme.spacing.sm,
+    gap: spacing.sm,
   },
   title: {
     flex: 1,
-    fontSize: theme.fontSize.sm,
-    color: theme.colors.text,
-    fontWeight: theme.fontWeight.medium,
+    fontSize: fontSize.sm,
+    color: colors.text,
+    fontWeight: fontWeight.medium,
     lineHeight: 18,
   },
   price: {
-    fontSize: theme.fontSize.md,
-    color: theme.colors.accent,
-    fontWeight: theme.fontWeight.bold,
+    fontSize: fontSize.md,
+    color: colors.accent,
+    fontWeight: fontWeight.bold,
   },
   quantityRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.sm,
+    gap: spacing.sm,
   },
   quantityButton: {
     width: 28,
     height: 28,
-    borderRadius: theme.radius.sm,
+    borderRadius: radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.border,
-    backgroundColor: theme.colors.surface,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
   quantity: {
-    fontSize: theme.fontSize.md,
-    color: theme.colors.text,
-    fontWeight: theme.fontWeight.semiBold,
+    fontSize: fontSize.md,
+    color: colors.text,
+    fontWeight: fontWeight.semiBold,
     minWidth: 24,
     textAlign: 'center',
   },

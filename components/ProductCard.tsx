@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import theme from '../constants/theme';
+import { colors, fontSize, fontWeight, radius, shadow, spacing } from '../constants/theme';
 import { Product } from '../types/product';
 import { formatCurrency } from '../utils/currency';
 
@@ -66,80 +66,80 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: theme.colors.background,
-    borderRadius: theme.radius.md,
+    backgroundColor: colors.background,
+    borderRadius: radius.md,
     borderWidth: 1,
-    borderColor: theme.colors.border,
-    marginHorizontal: theme.spacing.md,
-    marginBottom: theme.spacing.md,
+    borderColor: colors.border,
+    marginHorizontal: spacing.md,
+    marginBottom: spacing.md,
     overflow: 'hidden',
-    ...theme.shadow.sm,
+    ...shadow.sm,
   },
   imageContainer: {
-    backgroundColor: theme.colors.surface,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
     height: 180,
-    padding: theme.spacing.md,
+    padding: spacing.md,
   },
   image: {
     width: '100%',
     height: '100%',
   },
   body: {
-    padding: theme.spacing.md,
-    paddingBottom: theme.spacing.sm,
-    gap: theme.spacing.xs,
+    padding: spacing.md,
+    paddingBottom: spacing.sm,
+    gap: spacing.xs,
   },
   category: {
-    fontSize: theme.fontSize.xs,
-    color: theme.colors.accent,
-    fontWeight: theme.fontWeight.semiBold,
+    fontSize: fontSize.xs,
+    color: colors.accent,
+    fontWeight: fontWeight.semiBold,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
   },
   title: {
-    fontSize: theme.fontSize.md,
-    color: theme.colors.text,
-    fontWeight: theme.fontWeight.semiBold,
+    fontSize: fontSize.md,
+    color: colors.text,
+    fontWeight: fontWeight.semiBold,
     lineHeight: 22,
   },
   price: {
-    fontSize: theme.fontSize.lg,
-    color: theme.colors.primary,
-    fontWeight: theme.fontWeight.bold,
-    marginTop: theme.spacing.xs,
+    fontSize: fontSize.lg,
+    color: colors.primary,
+    fontWeight: fontWeight.bold,
+    marginTop: spacing.xs,
   },
   footer: {
     flexDirection: 'row',
-    gap: theme.spacing.sm,
-    padding: theme.spacing.md,
-    paddingTop: theme.spacing.sm,
+    gap: spacing.sm,
+    padding: spacing.md,
+    paddingTop: spacing.sm,
   },
   detailButton: {
     flex: 1,
-    paddingVertical: theme.spacing.sm,
-    borderRadius: theme.radius.sm,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.primary,
+    borderColor: colors.primary,
     alignItems: 'center',
   },
   detailButtonText: {
-    fontSize: theme.fontSize.sm,
-    color: theme.colors.primary,
-    fontWeight: theme.fontWeight.semiBold,
+    fontSize: fontSize.sm,
+    color: colors.primary,
+    fontWeight: fontWeight.semiBold,
   },
   cartButton: {
     flex: 1,
-    paddingVertical: theme.spacing.sm,
-    borderRadius: theme.radius.sm,
-    backgroundColor: theme.colors.accent,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.sm,
+    backgroundColor: colors.accent,
     alignItems: 'center',
   },
   cartButtonText: {
-    fontSize: theme.fontSize.sm,
-    color: theme.colors.white,
-    fontWeight: theme.fontWeight.semiBold,
+    fontSize: fontSize.sm,
+    color: colors.white,
+    fontWeight: fontWeight.semiBold,
   },
 });
 

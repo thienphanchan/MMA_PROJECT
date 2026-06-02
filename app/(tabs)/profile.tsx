@@ -1,10 +1,10 @@
 import { colors, fontSize, radius, spacing } from '@/constants/theme';
 import React from 'react';
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 
 interface TechItem {
@@ -54,21 +54,7 @@ export default function ProfileScreen(): React.JSX.Element {
         </View>
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Tech Stack</Text>
-        {TECH_STACK.map((tech: TechItem) => (
-          <View key={tech.label} style={styles.techRow}>
-            <View style={styles.techBadge}>
-              <Text style={styles.techBadgeText}>{tech.label}</Text>
-            </View>
-            <Text style={styles.techDescription}>{tech.description}</Text>
-          </View>
-        ))}
-      </View>
-
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>Built with React Native & Expo</Text>
-      </View>
+      
     </ScrollView>
   );
 }

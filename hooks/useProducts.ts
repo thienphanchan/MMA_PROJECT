@@ -33,6 +33,7 @@ const useProducts = (): UseProductsReturn => {
   const fetchProductById = useCallback(async (id: number): Promise<void> => {
     setLoading(true);
     setError(null);
+    setProduct(null);
     try {
       const data = await getProductById(id);
       setProduct(data);

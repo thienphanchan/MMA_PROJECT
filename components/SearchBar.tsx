@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
-import theme from '../constants/theme';
+import { colors, fontSize, radius, spacing } from '../constants/theme';
 
 interface SearchBarProps {
   value: string;
@@ -14,7 +14,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChangeText }) => {
       <Feather
         name="search"
         size={18}
-        color={theme.colors.textMuted}
+        color={colors.textMuted}
         style={styles.icon}
       />
       <TextInput
@@ -22,7 +22,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChangeText }) => {
         value={value}
         onChangeText={onChangeText}
         placeholder="Search products..."
-        placeholderTextColor={theme.colors.textMuted}
+        placeholderTextColor={colors.textMuted}
         returnKeyType="search"
         clearButtonMode="while-editing"
         autoCorrect={false}
@@ -36,22 +36,22 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.radius.md,
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
     borderWidth: 1,
-    borderColor: theme.colors.border,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
-    marginHorizontal: theme.spacing.md,
-    marginVertical: theme.spacing.sm,
+    borderColor: colors.border,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    marginHorizontal: spacing.md,
+    marginVertical: spacing.sm,
   },
   icon: {
-    marginRight: theme.spacing.sm,
+    marginRight: spacing.sm,
   },
   input: {
     flex: 1,
-    fontSize: theme.fontSize.md,
-    color: theme.colors.text,
+    fontSize: fontSize.md,
+    color: colors.text,
     paddingVertical: 0,
   },
 });

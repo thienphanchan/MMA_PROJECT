@@ -14,7 +14,8 @@ const useSearch = (products: Product[]): UseSearchReturn => {
     const q = query.trim().toLowerCase();
     if (!q) return products;
     return products.filter((product) =>
-      product.title.toLowerCase().includes(q)
+      product.title.toLowerCase().includes(q) ||
+      product.category.toLowerCase().includes(q)
     );
   }, [products, query]);
 

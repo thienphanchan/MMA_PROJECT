@@ -1,16 +1,18 @@
 import CartItem from '@/components/CartItem';
+import { colors, fontSize, radius, spacing } from '@/constants/theme';
 import useCartStore from '@/store/cartStore';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import {
-    FlatList,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import { CartItem as CartItemType } from '@/types/cart';
+import { formatCurrency } from '@/utils/currency';
 
 export default function CartScreen(): React.JSX.Element {
   const router = useRouter();
@@ -61,19 +63,19 @@ export default function CartScreen(): React.JSX.Element {
           <View style={styles.summaryContainer}>
             <View style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>Subtotal</Text>
-              <Text style={styles.summaryValue}>${subtotal.toFixed(2)}</Text>
+              <Text style={styles.summaryValue}>{formatCurrency(subtotal)}</Text>
             </View>
 
             <View style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>Tax (8%)</Text>
-              <Text style={styles.summaryValue}>${tax.toFixed(2)}</Text>
+              <Text style={styles.summaryValue}>{formatCurrency(tax)}</Text>
             </View>
 
             <View style={styles.divider} />
 
             <View style={styles.summaryRow}>
               <Text style={styles.totalLabel}>Total</Text>
-              <Text style={styles.totalValue}>${total.toFixed(2)}</Text>
+              <Text style={styles.totalValue}>{formatCurrency(total)}</Text>
             </View>
 
             <TouchableOpacity
@@ -92,40 +94,40 @@ export default function CartScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.background,
   },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 32,
+    padding: spacing.xl,
   },
   emptyIcon: {
     fontSize: 64,
-    marginBottom: 16,
+    marginBottom: spacing.md,
   },
   emptyText: {
-    fontSize: 20,
+    fontSize: fontSize.xl,
     fontWeight: '700',
-    color: '#212121',
-    marginBottom: 8,
+    color: colors.text,
+    marginBottom: spacing.xs,
   },
   emptySubText: {
-    fontSize: 14,
-    color: '#888',
+    fontSize: fontSize.sm,
+    color: colors.textMuted,
     textAlign: 'center',
   },
   list: {
-    padding: 12,
-    paddingBottom: 4,
+    padding: spacing.sm,
+    paddingBottom: spacing.xs,
   },
   summaryContainer: {
-    backgroundColor: '#FFFFFF',
-    padding: 16,
+    backgroundColor: colors.surface,
+    padding: spacing.md,
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
+    borderTopColor: colors.border,
     elevation: 8,
-    shadowColor: '#000',
+    shadowColor: colors.black,
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.08,
     shadowRadius: 4,
@@ -137,39 +139,39 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   summaryLabel: {
-    fontSize: 14,
-    color: '#555',
+    fontSize: fontSize.sm,
+    color: colors.textSecondary,
   },
   summaryValue: {
-    fontSize: 14,
-    color: '#212121',
+    fontSize: fontSize.sm,
+    color: colors.text,
     fontWeight: '500',
   },
   divider: {
     height: 1,
-    backgroundColor: '#E0E0E0',
-    marginVertical: 8,
+    backgroundColor: colors.border,
+    marginVertical: spacing.sm,
   },
   totalLabel: {
-    fontSize: 18,
+    fontSize: fontSize.lg,
     fontWeight: '700',
-    color: '#212121',
+    color: colors.text,
   },
   totalValue: {
-    fontSize: 18,
+    fontSize: fontSize.lg,
     fontWeight: '800',
-    color: '#2E7D32',
+    color: colors.success,
   },
   checkoutButton: {
-    backgroundColor: '#6200EE',
-    paddingVertical: 14,
-    borderRadius: 8,
+    backgroundColor: colors.primary,
+    paddingVertical: spacing.md,
+    borderRadius: radius.md,
     alignItems: 'center',
-    marginTop: 12,
+    marginTop: spacing.sm,
   },
   checkoutButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    color: colors.white,
+    fontSize: fontSize.md,
     fontWeight: '700',
   },
 });

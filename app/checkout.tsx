@@ -1,36 +1,20 @@
 import { colors, fontSize, radius, spacing } from '@/constants/theme';
 import useCartStore from '@/store/cartStore';
 import { CartItem } from '@/types/cart';
+import { CheckoutFormData, CheckoutSchema } from '@/utils/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
-    Alert,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { z } from 'zod';
-
-const CheckoutSchema = z.object({
-  name: z
-    .string()
-    .min(2, 'Name must be at least 2 characters')
-    .max(50, 'Name must be at most 50 characters'),
-  email: z
-    .string()
-    .email('Please enter a valid email address'),
-  address: z
-    .string()
-    .min(10, 'Address must be at least 10 characters')
-    .max(200, 'Address must be at most 200 characters'),
-});
-
-type CheckoutFormData = z.infer<typeof CheckoutSchema>;
 
 export default function CheckoutScreen(): React.JSX.Element {
   const router = useRouter();
@@ -267,7 +251,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   totalValue: {
-    fontSize: fontSize.base,
+    fontSize: fontSize.md,
     fontWeight: '800',
     color: colors.success,
   },
@@ -284,7 +268,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.sm,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm + 2,
-    fontSize: fontSize.base,
+    fontSize: fontSize.md,
     color: colors.text,
     backgroundColor: colors.background,
   },
@@ -293,11 +277,11 @@ const styles = StyleSheet.create({
     paddingTop: spacing.sm,
   },
   inputError: {
-    borderColor: colors.error,
+    borderColor: colors.danger,
   },
   errorText: {
     fontSize: fontSize.sm,
-    color: colors.error,
+    color: colors.danger,
     marginTop: spacing.xs,
   },
   submitButton: {
@@ -309,7 +293,7 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     color: colors.surface,
-    fontSize: fontSize.base,
+    fontSize: fontSize.md,
     fontWeight: '700',
   },
 });

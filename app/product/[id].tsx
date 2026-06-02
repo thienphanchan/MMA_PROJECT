@@ -1,42 +1,30 @@
+import { colors, fontSize, radius, spacing } from '@/constants/theme';
 import useProducts from '@/hooks/useProducts';
 import useCartStore from '@/store/cartStore';
+import { formatCurrency } from '@/utils/currency';
+import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
-    ActivityIndicator,
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-}
-
-interface CartState {
-  addToCart: (product: Product) => void;
-}
 
 export default function ProductDetailScreen(): React.JSX.Element {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { products, loading, error } = useProducts();
-  const addToCart = useCartStore((state: CartState) => state.addToCart);
+  const { product, loading, error, fetchProductById } = useProducts();
+  const addToCart = useCartStore((state) => state.addToCart);
 
-  const product: Product | undefined = products.find(
-    (p: Product) => p.id === Number(id)
-  );
+  useEffect(() => {
+    const productId = Number(id);
+    if (!Number.isNaN(productId)) {
+      void fetchProductById(productId);
+    }
+  }, [fetchProductById, id]);
 
   const handleAddToCart = (): void => {
     if (product) {
@@ -47,7 +35,7 @@ export default function ProductDetailScreen(): React.JSX.Element {
   if (loading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#6200EE" />
+        <ActivityIndicator size="large" color={colors.primary} />
         <Text style={styles.loadingText}>Loading product...</Text>
       </View>
     );
@@ -75,13 +63,13 @@ export default function ProductDetailScreen(): React.JSX.Element {
       <Image
         source={{ uri: product.image }}
         style={styles.image}
-        resizeMode="contain"
+        contentFit="contain"
       />
 
       <View style={styles.infoContainer}>
         <Text style={styles.category}>{product.category.toUpperCase()}</Text>
         <Text style={styles.title}>{product.title}</Text>
-        <Text style={styles.price}>${product.price.toFixed(2)}</Text>
+        <Text style={styles.price}>{formatCurrency(product.price)}</Text>
 
         <View style={styles.ratingContainer}>
           <Text style={styles.ratingLabel}>Rating: </Text>
@@ -104,96 +92,96 @@ export default function ProductDetailScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background,
   },
   content: {
-    paddingBottom: 32,
+    paddingBottom: spacing.xl,
   },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
+    padding: spacing.lg,
   },
   loadingText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: '#555',
+    marginTop: spacing.sm,
+    fontSize: fontSize.md,
+    color: colors.textSecondary,
   },
   errorText: {
-    fontSize: 18,
+    fontSize: fontSize.lg,
     fontWeight: '600',
-    color: '#D32F2F',
-    marginBottom: 8,
+    color: colors.danger,
+    marginBottom: spacing.xs,
   },
   errorDetail: {
-    fontSize: 14,
-    color: '#777',
+    fontSize: fontSize.sm,
+    color: colors.textSecondary,
     textAlign: 'center',
   },
   image: {
     width: '100%',
     height: 300,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.surface,
   },
   infoContainer: {
-    padding: 16,
+    padding: spacing.md,
   },
   category: {
-    fontSize: 12,
-    color: '#6200EE',
+    fontSize: fontSize.xs,
+    color: colors.primary,
     fontWeight: '600',
     letterSpacing: 1,
-    marginBottom: 8,
+    marginBottom: spacing.xs,
   },
   title: {
-    fontSize: 20,
+    fontSize: fontSize.xl,
     fontWeight: '700',
-    color: '#212121',
-    marginBottom: 8,
+    color: colors.text,
+    marginBottom: spacing.xs,
     lineHeight: 28,
   },
   price: {
-    fontSize: 24,
+    fontSize: fontSize.xxl,
     fontWeight: '800',
-    color: '#2E7D32',
-    marginBottom: 12,
+    color: colors.success,
+    marginBottom: spacing.sm,
   },
   ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: spacing.md,
   },
   ratingLabel: {
-    fontSize: 14,
-    color: '#555',
+    fontSize: fontSize.sm,
+    color: colors.textSecondary,
     fontWeight: '600',
   },
   ratingValue: {
-    fontSize: 14,
-    color: '#555',
+    fontSize: fontSize.sm,
+    color: colors.textSecondary,
   },
   descriptionLabel: {
-    fontSize: 16,
+    fontSize: fontSize.md,
     fontWeight: '700',
-    color: '#212121',
-    marginBottom: 8,
+    color: colors.text,
+    marginBottom: spacing.xs,
   },
   description: {
-    fontSize: 14,
-    color: '#555',
+    fontSize: fontSize.sm,
+    color: colors.textSecondary,
     lineHeight: 22,
-    marginBottom: 24,
+    marginBottom: spacing.lg,
   },
   addButton: {
-    backgroundColor: '#6200EE',
-    paddingVertical: 14,
-    borderRadius: 8,
+    backgroundColor: colors.primary,
+    paddingVertical: spacing.md,
+    borderRadius: radius.md,
     alignItems: 'center',
   },
   addButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    color: colors.white,
+    fontSize: fontSize.md,
     fontWeight: '700',
   },
 });
