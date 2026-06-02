@@ -1,0 +1,35 @@
+import axios from 'axios';
+import { Product } from '../types/product';
+
+
+const apiClient = axios.create({
+  baseURL: 'https://fakestoreapi.com',
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const getProducts = async (): Promise<Product[]> => {
+  try {
+    const response = await apiClient.get<Product[]>('/products');
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message ?? 'Failed to fetch products');
+    }
+    throw new Error('An unexpected error occurred');
+  }
+};
+
+export const getProductById = async (id: number): Promise<Product> => {
+  try {
+    const response = await apiClient.get<Product>(`/products/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message ?? `Failed to fetch product with id ${id}`);
+    }
+    throw new Error('An unexpected error occurred');
+  }
+};
