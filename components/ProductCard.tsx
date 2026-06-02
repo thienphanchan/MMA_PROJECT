@@ -66,11 +66,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
+    flex: 1,
     backgroundColor: colors.background,
-    borderRadius: radius.md,
+    borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
-    marginHorizontal: spacing.md,
+    marginHorizontal: spacing.xs,
     marginBottom: spacing.md,
     overflow: 'hidden',
     ...shadow.sm,
@@ -79,15 +80,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 180,
-    padding: spacing.md,
+    height: 140,
+    padding: spacing.sm,
   },
   image: {
     width: '100%',
     height: '100%',
   },
   body: {
-    padding: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
     paddingBottom: spacing.sm,
     gap: spacing.xs,
   },
@@ -111,13 +113,13 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   footer: {
-    flexDirection: 'row',
-    gap: spacing.sm,
+    flexDirection: 'column',
+    gap: spacing.xs,
     padding: spacing.md,
     paddingTop: spacing.sm,
   },
   detailButton: {
-    flex: 1,
+    width: '100%',
     paddingVertical: spacing.sm,
     borderRadius: radius.sm,
     borderWidth: 1,
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
     fontWeight: fontWeight.semiBold,
   },
   cartButton: {
-    flex: 1,
+    width: '100%',
     paddingVertical: spacing.sm,
     borderRadius: radius.sm,
     backgroundColor: colors.accent,

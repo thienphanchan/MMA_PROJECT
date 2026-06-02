@@ -1,3 +1,4 @@
+import HeaderBackButton from '@/components/HeaderBackButton';
 import { colors, fontSize } from '@/constants/theme';
 import useCartStore from '@/store/cartStore';
 import { Ionicons } from '@expo/vector-icons';
@@ -22,7 +23,14 @@ export default function TabLayout(): React.JSX.Element {
   return (
     <Tabs
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: colors.background,
+        },
+        headerTintColor: colors.text,
+        headerShadowVisible: false,
+        headerLeft: () => <HeaderBackButton />,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,
         tabBarStyle: styles.tabBar,

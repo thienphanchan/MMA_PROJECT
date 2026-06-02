@@ -1,6 +1,7 @@
 import { colors, fontSize, radius, spacing } from '@/constants/theme';
 import useCartStore from '@/store/cartStore';
 import { CartItem } from '@/types/cart';
+import { formatCurrency } from '@/utils/currency';
 import { CheckoutFormData, CheckoutSchema } from '@/utils/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
@@ -29,6 +30,8 @@ export default function CheckoutScreen(): React.JSX.Element {
   const tax: number = subtotal * TAX_RATE;
   const total: number = subtotal + tax;
 
+  const orderId = `ORD-${Date.now().toString().slice(-6)}`;
+
   const {
     control,
     handleSubmit,
@@ -42,10 +45,29 @@ export default function CheckoutScreen(): React.JSX.Element {
     },
   });
 
-  const onSubmit = (_data: CheckoutFormData): void => {
+  const onSubmit = (data: CheckoutFormData): void => {
+    if (items.length === 0) {
+      Alert.alert('Giỏ hàng trống', 'Vui lòng thêm sản phẩm trước khi đặt hàng.');
+      return;
+    }
+
+    const summaryLines = items.map(
+      (item) => `- ${item.product.title} x${item.quantity} (${formatCurrency(item.product.price * item.quantity)})`
+    );
+
     Alert.alert(
-      'Order Placed!',
-      'Thank you for your purchase. Your order has been placed successfully.',
+      'Đặt hàng thành công',
+      [
+        `Mã đơn: ${orderId}`,
+        `Khách hàng: ${data.name}`,
+        `Email: ${data.email}`,
+        `Địa chỉ: ${data.address}`,
+        '',
+        'Sản phẩm:',
+        ...summaryLines,
+        '',
+        `Tổng tiền: ${formatCurrency(total)}`,
+      ].join('\n'),
       [
         {
           text: 'OK',
@@ -63,6 +85,12 @@ export default function CheckoutScreen(): React.JSX.Element {
       <Text style={styles.sectionTitle}>Order Summary</Text>
 
       <View style={styles.card}>
+        {items.length === 0 && (
+          <Text style={styles.emptyCartText}>
+            Your cart is empty. Add products before checkout.
+          </Text>
+        )}
+
         {items.map((item: CartItem) => (
           <View key={item.product.id} style={styles.orderRow}>
             <Text style={styles.orderItemName} numberOfLines={1}>
@@ -70,7 +98,7 @@ export default function CheckoutScreen(): React.JSX.Element {
             </Text>
             <Text style={styles.orderItemQty}>x{item.quantity}</Text>
             <Text style={styles.orderItemPrice}>
-              ${(item.product.price * item.quantity).toFixed(2)}
+              {formatCurrency(item.product.price * item.quantity)}
             </Text>
           </View>
         ))}
@@ -79,18 +107,18 @@ export default function CheckoutScreen(): React.JSX.Element {
 
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Subtotal</Text>
-          <Text style={styles.summaryValue}>${subtotal.toFixed(2)}</Text>
+          <Text style={styles.summaryValue}>{formatCurrency(subtotal)}</Text>
         </View>
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Tax (8%)</Text>
-          <Text style={styles.summaryValue}>${tax.toFixed(2)}</Text>
+          <Text style={styles.summaryValue}>{formatCurrency(tax)}</Text>
         </View>
 
         <View style={styles.divider} />
 
         <View style={styles.summaryRow}>
           <Text style={styles.totalLabel}>Total</Text>
-          <Text style={styles.totalValue}>${total.toFixed(2)}</Text>
+          <Text style={styles.totalValue}>{formatCurrency(total)}</Text>
         </View>
       </View>
 
@@ -166,8 +194,9 @@ export default function CheckoutScreen(): React.JSX.Element {
       </View>
 
       <TouchableOpacity
-        style={styles.submitButton}
+        style={[styles.submitButton, items.length === 0 ? styles.submitButtonDisabled : null]}
         onPress={handleSubmit(onSubmit)}
+        disabled={items.length === 0}
       >
         <Text style={styles.submitButtonText}>Place Order</Text>
       </TouchableOpacity>
@@ -226,6 +255,11 @@ const styles = StyleSheet.create({
     color: colors.text,
     minWidth: 60,
     textAlign: 'right',
+  },
+  emptyCartText: {
+    fontSize: fontSize.sm,
+    color: colors.textMuted,
+    marginBottom: spacing.sm,
   },
   divider: {
     height: 1,
@@ -290,6 +324,9 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     alignItems: 'center',
     marginTop: spacing.sm,
+  },
+  submitButtonDisabled: {
+    opacity: 0.6,
   },
   submitButtonText: {
     color: colors.surface,

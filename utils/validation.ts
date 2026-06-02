@@ -13,3 +13,10 @@ export const CheckoutSchema = z.object({
 });
 
 export type CheckoutFormData = z.infer<typeof CheckoutSchema>;
+
+export const LoginSchema = z.object({
+  username: z.string().min(1, 'Username is required'),
+  password: z.string().min(1, 'Password is required'),
+});
+
+export type LoginFormData = z.infer<typeof LoginSchema>;
