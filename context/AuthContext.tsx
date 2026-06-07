@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useContext, useEffect, useState } from 'react';
 
-const TOKEN_KEY = 'auth-token';
-const USERNAME_KEY = 'auth-username';
+const TOKEN_KEY = 'auth-tokens';
+const USERNAME_KEY = 'auth-usernames';
 
 interface AuthContextType {
     token: string | null;

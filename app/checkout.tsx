@@ -1,3 +1,4 @@
+import { useLayout } from '@/hooks/useLayout';
 import { colors, fontSize, radius, spacing } from '@/constants/theme';
 import useCartStore from '@/store/cartStore';
 import { CartItem } from '@/types/cart';
@@ -42,6 +43,7 @@ function validateForm(data: FormData): FormErrors {
 
 export default function CheckoutScreen(): React.JSX.Element {
   const router = useRouter();
+  const { isLandscape } = useLayout();
   const items = useCartStore((state) => state.items);
   const clearCart = useCartStore((state) => state.clearCart);
 
@@ -51,8 +53,7 @@ export default function CheckoutScreen(): React.JSX.Element {
   const subtotal = items.reduce(
     (sum: number, item: CartItem) => sum + item.product.price * item.quantity, 0
   );
-  const TAX_RATE = 0.08;
-  const tax = subtotal * TAX_RATE;
+  const tax = subtotal * 0.08;
   const total = subtotal + tax;
   const orderId = `ORD-${Date.now().toString().slice(-6)}`;
 
@@ -68,17 +69,14 @@ export default function CheckoutScreen(): React.JSX.Element {
       Alert.alert('Giỏ hàng trống', 'Vui lòng thêm sản phẩm trước khi đặt hàng.');
       return;
     }
-
     const validationErrors = validateForm(form);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-
     const summaryLines = items.map(
       (item) => `- ${item.product.title} x${item.quantity} (${formatCurrency(item.product.price * item.quantity)})`
     );
-
     Alert.alert(
       '✅ Đặt hàng thành công',
       [
@@ -104,13 +102,13 @@ export default function CheckoutScreen(): React.JSX.Element {
     );
   };
 
-  return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+  // Component con để tái sử dụng
+  const OrderSummaryBlock = () => (
+    <>
       <Text style={styles.sectionTitle}>Order Summary</Text>
-
       <View style={styles.card}>
         {items.length === 0 ? (
-          <Text style={styles.emptyCartText}>Giỏ hàng trống. Thêm sản phẩm trước khi checkout.</Text>
+          <Text style={styles.emptyCartText}>Giỏ hàng trống.</Text>
         ) : (
           items.map((item: CartItem) => (
             <View key={item.product.id} style={styles.orderRow}>
@@ -124,7 +122,6 @@ export default function CheckoutScreen(): React.JSX.Element {
             </View>
           ))
         )}
-
         <View style={styles.divider} />
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Subtotal</Text>
@@ -140,9 +137,12 @@ export default function CheckoutScreen(): React.JSX.Element {
           <Text style={styles.totalValue}>{formatCurrency(total)}</Text>
         </View>
       </View>
+    </>
+  );
 
+  const ShippingBlock = () => (
+    <>
       <Text style={styles.sectionTitle}>Shipping Details</Text>
-
       <View style={styles.card}>
         <Text style={styles.fieldLabel}>Full Name</Text>
         <TextInput
@@ -188,6 +188,28 @@ export default function CheckoutScreen(): React.JSX.Element {
       >
         <Text style={styles.submitButtonText}>Place Order</Text>
       </TouchableOpacity>
+    </>
+  );
+
+  return (
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      {isLandscape ? (
+        // Landscape: 2 cột ngang
+        <View style={styles.landscapeInner}>
+          <View style={styles.column}>
+            <OrderSummaryBlock />
+          </View>
+          <View style={styles.column}>
+            <ShippingBlock />
+          </View>
+        </View>
+      ) : (
+        // Portrait: stack dọc
+        <>
+          <OrderSummaryBlock />
+          <ShippingBlock />
+        </>
+      )}
     </ScrollView>
   );
 }
@@ -195,6 +217,14 @@ export default function CheckoutScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   content: { padding: spacing.lg, paddingBottom: spacing.xxl },
+  // Layout
+  landscapeInner: {
+    flexDirection: 'row',
+    gap: spacing.lg,
+    alignItems: 'flex-start',
+  },
+  column: { flex: 1 },
+  // Section
   sectionTitle: {
     fontSize: fontSize.lg,
     fontWeight: '700',
@@ -213,21 +243,19 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  orderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: spacing.sm,
-  },
+  // Order summary
+  orderRow: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm },
   orderItemName: { flex: 1, fontSize: fontSize.sm, color: colors.text, marginRight: spacing.sm },
   orderItemQty: { fontSize: fontSize.sm, color: colors.textSecondary, marginRight: spacing.sm, minWidth: 28, textAlign: 'center' },
   orderItemPrice: { fontSize: fontSize.sm, fontWeight: '600', color: colors.text, minWidth: 60, textAlign: 'right' },
-  emptyCartText: { fontSize: fontSize.sm, color: colors.textMuted, marginBottom: spacing.sm },
+  emptyCartText: { fontSize: fontSize.sm, color: colors.textMuted },
   divider: { height: 1, backgroundColor: colors.border, marginVertical: spacing.sm },
   summaryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: spacing.xs },
   summaryLabel: { fontSize: fontSize.md, color: colors.textSecondary },
   summaryValue: { fontSize: fontSize.md, color: colors.text },
   totalLabel: { fontSize: fontSize.md, fontWeight: '700', color: colors.text },
   totalValue: { fontSize: fontSize.md, fontWeight: '800', color: colors.success },
+  // Form
   fieldLabel: {
     fontSize: fontSize.sm,
     fontWeight: '600',
@@ -248,6 +276,7 @@ const styles = StyleSheet.create({
   inputMultiline: { height: 80, paddingTop: spacing.sm },
   inputError: { borderColor: colors.danger },
   errorText: { fontSize: fontSize.sm, color: colors.danger, marginTop: spacing.xs },
+  // Button
   submitButton: {
     backgroundColor: colors.primary,
     paddingVertical: spacing.md + 2,
