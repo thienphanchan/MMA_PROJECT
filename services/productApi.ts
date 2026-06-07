@@ -1,13 +1,10 @@
 import axios from 'axios';
 import { Product } from '../types/product';
 
-
 const apiClient = axios.create({
-  baseURL: 'https://fakestoreapi.com',
+  baseURL: process.env.EXPO_PUBLIC_API_URL,
   timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  headers: { 'Content-Type': 'application/json' },
 });
 
 export const getProducts = async (): Promise<Product[]> => {

@@ -1,15 +1,32 @@
 import HeaderBackButton from '@/components/HeaderBackButton';
 import { colors } from '@/constants/theme';
-import { Stack } from 'expo-router';
-import React from 'react';
+import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { Stack, useRouter, useSegments } from 'expo-router';
+import { useEffect } from 'react';
 
-export default function RootLayout(): React.JSX.Element {
+function RouteGuard() {
+  const { token, isLoading } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    // Cast để tránh lỗi TypeScript
+    const firstSegment = segments[0] as string;
+    const inAuth = firstSegment === '(auth)';
+
+    if (!token && !inAuth) {
+      // @ts-ignore — route tồn tại sau khi tạo file (auth)
+      router.replace('/(auth)/login');
+    } else if (token && inAuth) {
+      router.replace('/(tabs)');
+    }
+  }, [token, isLoading, segments]);
+
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen
         name="product/[id]"
@@ -36,5 +53,13 @@ export default function RootLayout(): React.JSX.Element {
         }}
       />
     </Stack>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <AuthProvider>
+      <RouteGuard />
+    </AuthProvider>
   );
 }

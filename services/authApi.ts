@@ -1,11 +1,9 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'https://fakestoreapi.com',
+  baseURL: process.env.EXPO_PUBLIC_API_URL,
   timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  headers: { 'Content-Type': 'application/json' },
 });
 
 export interface LoginCredentials {
@@ -17,9 +15,7 @@ export interface LoginResponse {
   token: string;
 }
 
-export const loginUser = async (
-  credentials: LoginCredentials
-): Promise<LoginResponse> => {
+export const loginUser = async (credentials: LoginCredentials): Promise<LoginResponse> => {
   try {
     const response = await apiClient.post<LoginResponse>('/auth/login', credentials);
     return response.data;
