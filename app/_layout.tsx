@@ -2,25 +2,22 @@ import HeaderBackButton from '@/components/HeaderBackButton';
 import { colors } from '@/constants/theme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { Stack, useRouter, useSegments } from 'expo-router';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-function RouteGuard() {
+function RouteGuard(): React.JSX.Element {
   const { token, isLoading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
     if (isLoading) return;
-
-    // Cast để tránh lỗi TypeScript
     const firstSegment = segments[0] as string;
     const inAuth = firstSegment === '(auth)';
 
     if (!token && !inAuth) {
-      // @ts-ignore — route tồn tại sau khi tạo file (auth)
-      router.replace('/(auth)/login');
+      router.replace('/(auth)/login' as any);
     } else if (token && inAuth) {
-      router.replace('/(tabs)');
+      router.replace('/(tabs)' as any);
     }
   }, [token, isLoading, segments]);
 
@@ -56,7 +53,7 @@ function RouteGuard() {
   );
 }
 
-export default function RootLayout() {
+export default function RootLayout(): React.JSX.Element {
   return (
     <AuthProvider>
       <RouteGuard />

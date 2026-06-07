@@ -1,6 +1,7 @@
-import { colors, fontSize, radius, spacing } from '@/constants/theme';
 import { useAuth } from '@/context/AuthContext';
+import { colors, fontSize, radius, spacing } from '@/constants/theme';
 import { useRouter } from 'expo-router';
+import React from 'react';
 import {
   Alert,
   ScrollView,
@@ -10,11 +11,11 @@ import {
   View,
 } from 'react-native';
 
-export default function ProfileScreen() {
+export default function ProfileScreen(): React.JSX.Element {
   const { username, token, logout } = useAuth();
   const router = useRouter();
 
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     Alert.alert('Đăng xuất', 'Bạn có chắc muốn đăng xuất?', [
       { text: 'Huỷ', style: 'cancel' },
       {
@@ -22,8 +23,7 @@ export default function ProfileScreen() {
         style: 'destructive',
         onPress: async () => {
           await logout();
-          // @ts-ignore
-          router.replace('/(auth)/login');
+          router.replace('/(auth)/login' as any);
         },
       },
     ]);
@@ -31,7 +31,6 @@ export default function ProfileScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      {/* Avatar */}
       <View style={styles.avatarContainer}>
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>👤</Text>
@@ -40,12 +39,11 @@ export default function ProfileScreen() {
         <Text style={styles.statusBadge}>✓ Đã đăng nhập</Text>
       </View>
 
-      {/* Token info */}
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Thông tin phiên</Text>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Username</Text>
-          <Text style={styles.infoValue}>{username}</Text>
+          <Text style={styles.infoValue}>{username ?? '—'}</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Token</Text>
@@ -55,12 +53,15 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      {/* Project info */}
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Project Info</Text>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Project</Text>
           <Text style={styles.infoValue}>EcommerceApp</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.infoLabel}>Course</Text>
+          <Text style={styles.infoValue}>SE193355</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Platform</Text>
@@ -72,7 +73,6 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      {/* Logout */}
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>Đăng xuất</Text>
       </TouchableOpacity>
