@@ -26,7 +26,9 @@ export default function HomeScreen(): React.JSX.Element {
     fetchProducts, fetchCategories, fetchByCategory,
   } = useProducts();
   const { query, setQuery, filteredResults } = useSearch(products);
-  const { toggleWishlist, isWishlisted } = useWishlistStore();
+  const toggleWishlist = useWishlistStore((state) => state.toggleWishlist);
+  const wishlistItems = useWishlistStore((state) => state.items);
+  const isWishlisted = useWishlistStore((state) => state.isWishlisted);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   useEffect(() => {

@@ -11,8 +11,9 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 export default function WishlistScreen(): React.JSX.Element {
   const router = useRouter();
   const { numColumns, isLandscape } = useLayout();
-  const { items, toggleWishlist, isWishlisted } = useWishlistStore();
-
+  const items = useWishlistStore((state) => state.items);
+  const toggleWishlist = useWishlistStore((state) => state.toggleWishlist);
+  const isWishlisted = useWishlistStore((state) => state.isWishlisted);
   if (items.length === 0) {
     return (
       <View style={styles.emptyContainer}>
@@ -37,6 +38,7 @@ export default function WishlistScreen(): React.JSX.Element {
           styles.list,
           isLandscape && styles.listLandscape,
         ]}
+        extraData={wishlistItems}
         renderItem={({ item }: { item: Product }) => (
           <ProductCard
             product={item}
