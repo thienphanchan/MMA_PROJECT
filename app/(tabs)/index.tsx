@@ -4,7 +4,7 @@ import { colors, fontSize, spacing } from '@/constants/theme';
 import { useLayout } from '@/hooks/useLayout';
 import useProducts from '@/hooks/useProducts';
 import useSearch from '@/hooks/useSearch';
-import useCartStore from '@/store/cartStore';
+import useWishlistStore from '@/store/wishlistStore';
 import type { Product } from '@/types/product';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -26,7 +26,7 @@ export default function HomeScreen(): React.JSX.Element {
     fetchProducts, fetchCategories, fetchByCategory,
   } = useProducts();
   const { query, setQuery, filteredResults } = useSearch(products);
-  const addToCart = useCartStore((state) => state.addToCart);
+  const { toggleWishlist, isWishlisted } = useWishlistStore();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   useEffect(() => {
@@ -106,7 +106,8 @@ export default function HomeScreen(): React.JSX.Element {
           <ProductCard
             product={item}
             onPress={() => router.push(`/product/${item.id}`)}
-            onAddToCart={() => addToCart(item)}
+            onToggleWishlist={toggleWishlist}
+            isWishlisted={isWishlisted(item.id)}
           />
         )}
         ListEmptyComponent={

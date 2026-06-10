@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -8,59 +9,58 @@ import { formatCurrency } from '../utils/currency';
 interface ProductCardProps {
   product: Product;
   onPress: (product: Product) => void;
-  onAddToCart: (product: Product) => void;
+  onToggleWishlist: (product: Product) => void;
+  isWishlisted: boolean;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
   product,
   onPress,
-  onAddToCart,
+  onToggleWishlist,
+  isWishlisted,
 }) => {
   return (
-    <View style={styles.card}>
-      <TouchableOpacity
-        style={styles.imageContainer}
-        onPress={() => onPress(product)}
-        activeOpacity={0.85}
-      >
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => onPress(product)}
+      activeOpacity={0.85}
+    >
+      {/* Image + Heart Button */}
+      <View style={styles.imageContainer}>
         <Image
           source={{ uri: product.image }}
           style={styles.image}
           contentFit="contain"
           transition={300}
         />
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.heartButton}
+          onPress={(e) => {
+            e.stopPropagation();
+            onToggleWishlist(product);
+          }}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          activeOpacity={0.7}
+        >
+          <Ionicons
+            name={isWishlisted ? 'heart' : 'heart-outline'}
+            size={20}
+            color={isWishlisted ? colors.accent : colors.textSecondary}
+          />
+        </TouchableOpacity>
+      </View>
 
+      {/* Info */}
       <View style={styles.body}>
         <Text style={styles.category} numberOfLines={1}>
           {product.category}
         </Text>
-        <TouchableOpacity onPress={() => onPress(product)} activeOpacity={0.8}>
-          <Text style={styles.title} numberOfLines={2}>
-            {product.title}
-          </Text>
-        </TouchableOpacity>
+        <Text style={styles.title} numberOfLines={2}>
+          {product.title}
+        </Text>
         <Text style={styles.price}>{formatCurrency(product.price)}</Text>
       </View>
-
-      <View style={styles.footer}>
-        <TouchableOpacity
-          style={styles.detailButton}
-          onPress={() => onPress(product)}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.detailButtonText}>View Detail</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.cartButton}
-          onPress={() => onAddToCart(product)}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.cartButtonText}>Add To Cart</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -87,10 +87,22 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  heartButton: {
+    position: 'absolute',
+    top: spacing.sm,
+    right: spacing.sm,
+    backgroundColor: colors.background,
+    borderRadius: radius.full,
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...shadow.sm,
+  },
   body: {
     paddingHorizontal: spacing.md,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.sm,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.md,
     gap: spacing.xs,
   },
   category: {
@@ -101,47 +113,16 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
   },
   title: {
-    fontSize: fontSize.md,
+    fontSize: fontSize.sm,
     color: colors.text,
     fontWeight: fontWeight.semiBold,
-    lineHeight: 22,
+    lineHeight: 20,
   },
   price: {
-    fontSize: fontSize.lg,
+    fontSize: fontSize.md,
     color: colors.primary,
     fontWeight: fontWeight.bold,
     marginTop: spacing.xs,
-  },
-  footer: {
-    flexDirection: 'column',
-    gap: spacing.xs,
-    padding: spacing.md,
-    paddingTop: spacing.sm,
-  },
-  detailButton: {
-    width: '100%',
-    paddingVertical: spacing.sm,
-    borderRadius: radius.sm,
-    borderWidth: 1,
-    borderColor: colors.primary,
-    alignItems: 'center',
-  },
-  detailButtonText: {
-    fontSize: fontSize.sm,
-    color: colors.primary,
-    fontWeight: fontWeight.semiBold,
-  },
-  cartButton: {
-    width: '100%',
-    paddingVertical: spacing.sm,
-    borderRadius: radius.sm,
-    backgroundColor: colors.accent,
-    alignItems: 'center',
-  },
-  cartButtonText: {
-    fontSize: fontSize.sm,
-    color: colors.white,
-    fontWeight: fontWeight.semiBold,
   },
 });
 

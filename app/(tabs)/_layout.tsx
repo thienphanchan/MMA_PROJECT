@@ -1,6 +1,8 @@
 import HeaderBackButton from '@/components/HeaderBackButton';
+import HeaderCartButton from '@/components/HeaderCartButton';
 import { colors, fontSize } from '@/constants/theme';
 import useCartStore from '@/store/cartStore';
+import useWishlistStore from '@/store/wishlistStore';
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import React from 'react';
@@ -19,6 +21,16 @@ function CartBadge(): React.JSX.Element | null {
   );
 }
 
+function WishlistBadge(): React.JSX.Element | null {
+  const items = useWishlistStore((state) => state.items);
+  if (items.length === 0) return null;
+  return (
+    <View style={styles.badge}>
+      <Text style={styles.badgeText}>{items.length > 99 ? '99+' : items.length}</Text>
+    </View>
+  );
+}
+
 export default function TabLayout(): React.JSX.Element {
   return (
     <Tabs
@@ -31,6 +43,7 @@ export default function TabLayout(): React.JSX.Element {
         headerTintColor: colors.text,
         headerShadowVisible: false,
         headerLeft: () => <HeaderBackButton />,
+        headerRight: () => <HeaderCartButton />,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,
         tabBarStyle: styles.tabBar,
@@ -54,6 +67,18 @@ export default function TabLayout(): React.JSX.Element {
             <View>
               <Ionicons name="cart-outline" size={size} color={color} />
               <CartBadge />
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="wishlist"
+        options={{
+          title: 'Wishlist',
+          tabBarIcon: ({ color, size, focused }: { color: string; size: number; focused: boolean }) => (
+            <View>
+              <Ionicons name={focused ? 'heart' : 'heart-outline'} size={size} color={color} />
+              <WishlistBadge />
             </View>
           ),
         }}

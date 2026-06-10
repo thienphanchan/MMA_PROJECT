@@ -1,4 +1,5 @@
 import HeaderBackButton from '@/components/HeaderBackButton';
+import HeaderCartButton from '@/components/HeaderCartButton';
 import { colors } from '@/constants/theme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { Stack, useRouter, useSegments } from 'expo-router';
@@ -35,6 +36,7 @@ function RouteGuard(): React.JSX.Element {
           headerTintColor: colors.text,
           headerShadowVisible: false,
           headerLeft: () => <HeaderBackButton />,
+          headerRight: () => <HeaderCartButton />,
         }}
       />
       <Stack.Screen
@@ -47,6 +49,7 @@ function RouteGuard(): React.JSX.Element {
           headerTintColor: colors.text,
           headerShadowVisible: false,
           headerLeft: () => <HeaderBackButton />,
+          headerRight: () => <HeaderCartButton />,
         }}
       />
     </Stack>
